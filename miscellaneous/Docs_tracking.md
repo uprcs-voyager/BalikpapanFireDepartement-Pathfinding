@@ -12,3 +12,6 @@ The algorithm used for this pathfinding project is A*
 
 ## Making 'part' of the heuristic function (6/12/2025)
 the g_and_heuristic_cost file inside the the testing folder is composed of codes that give a little snippet of the avalaible data and nodes, the math formula, codes that pick 2 random nodes and then giving the distance between those 2 nodes. It works by using the haversine formula by using the latitude and longutide from both respected node to determine the distance between them. the output given is accurate and proven by google earth checking.
+
+## 'Seeing' What neighbor a node have 
+the codes inside available_neighbours_and_their_distance.py are used to find available neighbor that node 1 ( the starting node) and node 2 (the end node) has. The codes also give all the neighbor edges length so it will be usefull for the next step, which is creating the A* algorithm 
