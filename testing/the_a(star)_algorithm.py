@@ -1,4 +1,3 @@
-# External libraries
 import osmnx as ox
 import matplotlib.pyplot as plt
 import folium
@@ -6,7 +5,70 @@ import contextily as cx
 import pandas as pd
 import random
 from numpy import sin, cos, arccos, pi, round
-# Internal Import
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -131,7 +193,7 @@ from numpy import sin, cos, arccos, pi, round
 # print("Node Awal (Starting Node): ")
 # node1NeighborLength = gettingNeighborLength(node1)
 # print()
-# print("Node Akhir (Final Node): ")
+# print("Node Akhir (target Node): ")
 # node2NeighborLength = gettingNeighborLength(node2)
 
 
@@ -152,6 +214,6 @@ from numpy import sin, cos, arccos, pi, round
 
 
 
-print("\n\n\n\n")
+# print("\n\n\n\n")
 
 

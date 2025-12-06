@@ -15,3 +15,14 @@ the g_and_heuristic_cost file inside the the testing folder is composed of codes
 
 ## 'Seeing' What neighbor a node have 
 the codes inside available_neighbours_and_their_distance.py are used to find available neighbor that node 1 ( the starting node) and node 2 (the end node) has. The codes also give all the neighbor edges length so it will be usefull for the next step, which is creating the A* algorithm 
+
+## 'Splitting' the codes to improve readability (7/12/2025)
+The current progress is i made a function inside creating_nodes.py that will generate the starting and the end node based on the argument given to it and making codes for calculating and seeing what are the available neighbor nodes are inside the helper.py so hopefully the flow be like :
+1. Creating a node using the createNode function and the parameters are type (1/2) becuase : 
+   -   position or the starting position is already assigned if the type is 1, the g is set to 0 and to get the h we need to call the calculate heuristic function which will take 2 parameters (position and goal)
+
+2. The current plan to set the goal is to call the create node function again but the type parameters will be 2 (which means the node that will be created is the target node)
+
+3. based on those 2 nodes the next steps will be to calculate the heuristic by calling the calculate heurisctic function that will take 2 parameters (start and goal)
+
+4. Work In Progress

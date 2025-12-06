@@ -26,3 +26,5 @@ Selanjutnya adalah mengambil 2 random node dari data yang ada lalu menentukan ja
 ## 5. Membuat kode untuk melihat neighbor apa saja yang tersedia pada suatu node
 setelah mendapatkan node awal dan node akhir. Kita perlu mengetahui neighbor apa saja yang dapat dilewati oleh node 1.
 
+## 6. 
+
