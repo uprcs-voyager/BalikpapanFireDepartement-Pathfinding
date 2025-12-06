@@ -17,4 +17,10 @@ Pengambilan map balikpapan dilakukan dengan cara mendownload terlebih dahulu fil
    4. Lebar jalanan (width)
    5. Kepadatan jalanan (traffic density)
 
+## 3. Menginspeksi data yang ada
+Setelah data-data yang dibutuhkan sudah di siapkan, langkah selanjutnya yang dilakukan adalah menginspeksi data-data yang ada. Sepert, melihat attribute apa saja yang ada pada nodes dan edges 
+
+## 4. Menyiapkan heuristic function 
+Selanjutnya adalah mengambil 2 random node dari data yang ada lalu menentukan jarak dari kedua node tersebut menggunakan haversine formula. jarak antara kedua node tersebut nantinya dapat digunakan untuk menyiapkan algoritma A*
+
 
