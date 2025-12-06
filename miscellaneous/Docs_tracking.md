@@ -26,3 +26,5 @@ The current progress is i made a function inside creating_nodes.py that will gen
 3. based on those 2 nodes the next steps will be to calculate the heuristic by calling the calculate heurisctic function that will take 2 parameters (start and goal)
 
 4. Work In Progress
+
+'
