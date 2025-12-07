@@ -31,12 +31,30 @@ def calculateHeuristic(pos1: Tuple[float, float], pos2: Tuple[float, float]) -> 
     # the returned value will be in meters
     return round(distance * 1609.34, 2)
 
-def get_valid_neighbours(position: Tuple[float, float]) -> List[Tuple[float, float]] :
-    for v in G.neighbors(position) :
-        if v != 0 :
-            for key, data in G.get_edge_data(position, v).items() :
-                return [
-                    (v, key) for key, data in v 
-                ]
-        else : print("no neighbor available")
+def gettingNeighbor (node) :
+    neighbor = list(G.neighbors(node))
+    return neighbor
 
+def get_neighbor_length(id: Tuple[float]) -> List[Tuple[float]] :
+    neighbor_list = []
+    for v in G.neighbors(id) :
+        if v != 0 :
+            for key, data in G.get_edge_data(id, v).items() :
+                edge_length = data['length']
+                neighbor_data = {
+                    'neighbor' : v,
+                    'key' : key,
+                    'distance' : edge_length
+                }
+                neighbor_list.append(neighbor_data)
+    return neighbor_list
+
+
+def reconstruct_path (goal_node: Dict) -> List[Tuple[float]] :
+    path = []
+    current = goal_node
+    while current is not None :
+        path.append(current['id'])
+        current = current['parent']
+
+    return path[::-1]

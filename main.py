@@ -7,6 +7,35 @@ import pandas as pd
 import random
 from numpy import sin, cos, arccos, pi, round
 # Internal Import
+import components
+from components import aSTAR, creating_nodes, helper
+
+start_pos = creating_nodes.createNo(type=1)
+start_pos_data = start_pos[1]
+start_pos_id = start_pos_data['id']
+start_pos_coordinate = start_pos_data['position']
+print(f"start Pos ID: {start_pos_id}")
+print(start_pos)
+
+
+print()
+
+
+goal_pos = creating_nodes.createNo(type=2)
+goal_pos_data = goal_pos[1]
+goal_pos_id = goal_pos_data['id']
+goal_pos_coordinate = goal_pos_data['position']
+print(f"goal Pos ID: {goal_pos_id}")
+print(goal_pos)
+print(start_pos_coordinate)
+print(goal_pos_coordinate)
+
+path = aSTAR.find_path(start_pos_id, goal_pos_id, start_pos_coordinate, goal_pos_coordinate)
+
+if path :
+    print("path found")
+else :
+    print("error")
 
 
 
