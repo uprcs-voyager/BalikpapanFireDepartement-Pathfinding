@@ -4,6 +4,8 @@ import folium
 import contextily as cx
 import pandas as pd
 
+
+
 # mengatur bagaimana data akan ditampilkan
 pd.set_option('display.max_columns', None)
 pd.set_option('display.width', 10000)
