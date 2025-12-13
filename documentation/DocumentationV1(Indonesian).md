@@ -1,6 +1,19 @@
 # Sistem Pathfinding Rute Terbaik Untuk Layanan Kebakaran Daerah Balikpapan Menggunakan Algoritma A*
 ## Mata Kuliah : Pengantar Kecerdasan Artifisial (B)
+- Muhamad Radyt Iksan Pratama - 11241048
+- James Alvaro Gavriel Pulung - 11241036
+- Muhammad Fauzan Akmal - 11241054		
+- Yumna Azzahra - 11241090
 
+## Abstract
+Efisiensi waktu respon merupakan faktor krusial dalam penanganan situasi darurat, khususnya pada kasus kebakaran di mana keterlambatan dapat berakibat fatal. Proyek ini bertujuan untuk mengembangkan sistem pencarian rute terbaik (pathfinding) yang ditujukan untuk layanan pemadam kebakaran di wilayah Balikpapan. Sistem ini dibangun menggunakan bahasa pemrograman Python 3.13.9 dan memanfaatkan algoritma A* (A-Star) untuk menentukan jalur terpendek antara pos pemadam dan lokasi kejadian.
+
+Metodologi yang digunakan melibatkan pengolahan data geospasial nyata dari OpenStreetMap (OSM) melalui pustaka osmnx untuk memodelkan jaringan jalan sebagai graf. Dalam proses pencarian rute, algoritma A* mengkombinasikan biaya jarak tempuh aktual (G-Cost) dengan fungsi heuristik (H-Cost) yang dihitung menggunakan Haversine Formula untuk mengestimasi jarak sferis antar koordinat geografis. Hasil implementasi menunjukkan bahwa sistem mampu merekonstruksi jalur optimal secara efisien dari titik awal ke titik tujuan, yang diharapkan dapat menjadi alat bantu navigasi untuk meminimalkan waktu tempuh unit pemadam kebakaran di lapangan.
+
+Kata Kunci: A-Star Algorithm, Pathfinding, OpenStreetMap, Haversine Formula, Layanan Kebakaran, Balikpapan.
+
+## Methods
+### Tools yang Digunakan
 | Kategori | Tools | Deskripsi |
 | :--- | :--- | :--- |
 | Bahasa Pemrograman | Python 3.13.9 | Bahasa utama untuk pengembangan logika. |
@@ -10,8 +23,8 @@
 | Algoritma | A* (A-Star) | Algoritma pencarian jalur terpendek menggunakan heuristik. |
 | Tools Lain | Git, Github |
 
-## 2. Implementaasi
-### 2.1 Struktur Proyek
+## Implementaasi
+### Struktur Proyek
 Pada proyek ini terdapat lima folder yaitu : 
 - cache
 - components
@@ -39,7 +52,7 @@ Folder Components berisi file-file komponen yang dibuat agar implementasi algori
    Folder ini hanya berfungsi untuk mengetes file-file yang berisi kode seperti A*, pencari neighbor, data checking, dan lain-lain. Dalam tahap akhir folder ini akan dihapus/di masukan ke dalam `.gitignore`
 
 
-### 2.2 Alur program
+### Alur program
 Berikut adalah penjelasan tentang apa yang terjadi saat kode di dalam file `main.py` dijalankan : 
 1. Program memuat library eksternal (`osmnx`, `folium`, dll) dan modul internal dari folder `components`.
 2. **Penentuan Titik Awal (Start Node)**:
@@ -54,3 +67,9 @@ Berikut adalah penjelasan tentang apa yang terjadi saat kode di dalam file `main
 5. **Output Hasil**:
     - Jika jalur ditemukan (`if path:`), program mencetak "path found".
     - Jika gagal, program mencetak "error".
+
+## Demo
+
+## Summary
+
+## References
