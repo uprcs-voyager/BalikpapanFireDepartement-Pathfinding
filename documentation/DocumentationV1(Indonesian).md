@@ -1,14 +1,13 @@
 # Sistem Pathfinding Rute Terbaik Untuk Layanan Kebakaran Daerah Balikpapan Menggunakan Algoritma A*
 ## Mata Kuliah : Pengantar Kecerdasan Artifisial (B)
 
-## 1. Metodologi
-### 1.1 Tools yang digunakan 
-| Kategori | Tools |
-| :--- | :--- |
-| Bahasa pemrograman | Python 3.13.9 |
-| Library Eksternal | osmnx, matplotlib.pyplot, pandas, random, numpy, typing |
-| Rumus Yang Digunakan | Haversine Formula |
-| Algoritma yang Digunakan | A* (A-Star) |
+| Kategori | Tools | Deskripsi |
+| :--- | :--- | :--- |
+| Bahasa Pemrograman | Python 3.13.9 | Bahasa utama untuk pengembangan logika. |
+| Library Geospasial & Visualisasi | `osmnx`, `folium`, `contextily`, `matplotlib.pyplot` | Digunakan untuk memproses data peta (OpenStreetMap) dan visualisasi rute. |
+| Library Komputasi & Data | `pandas`, `numpy` | Digunakan untuk manipulasi data struktur dan perhitungan matematis (trigonometri). |
+| Library Utilitas | `random`, `typing` | Untuk pengacakan node dan type hinting. |
+| Algoritma | A* (A-Star) | Algoritma pencarian jalur terpendek menggunakan heuristik. |
 | Tools Lain | Git, Github |
 
 ## 2. Implementaasi
@@ -42,10 +41,16 @@ Folder Components berisi file-file komponen yang dibuat agar implementasi algori
 
 ### 2.2 Alur program
 Berikut adalah penjelasan tentang apa yang terjadi saat kode di dalam file `main.py` dijalankan : 
-1. kode akan memanggil fungsi create node type 1 untuk membuat node awal (posisi awal)
-2. Selanjutnya data-data node 1 (posisi awal) akan di ambil, termasuk koordinat dan ID nya untuk ditampilkan pada terminal 
-3. Berikutnya kode akan menjalankan fungsi create_node lagi namun kali ini dengan type 2 yang artinya node yang akan dibuat akan menjadi node tujuan.
-4. Data-data node 2 (node tujuan) juga akan di ambil termasuk koordinat dan ID node nya yang lalu akan ditampilkan di terminal
-5. Setelah terdapat node awal (node 1) dan node tujuan (node 2). Kode akan memanggil fungsi pada file aSTAR untuk memulai pencarian rute terbaik yang dapat digunakan
-6. Proses utama program terjadi pada file aSTAR. function find_path mengambil parameter-parameter seperti ` start_id: Tuple[float], goal_id: Tuple[float], start_coordinate: Tuple[float, float],  goal_coordinate: Tuple[float, float]`. fungsi ini lalu memanfaatkan fungsi-fungsi yang terdapat di dalam file `helper.py` dan `creating_nodes.py` untuk mendapatkan data heuristic, neighbor yang ada, dan juga membuat node baru berdasarkan neighbor yang tersedia. 
-7. Selanjutnya, jika path yang optimal sudah ditemukan, kode akan memanggil fungsi yang berada di `helper.py`, fungsi tersebut bernama `reconstruct_path`.
+1. Program memuat library eksternal (`osmnx`, `folium`, dll) dan modul internal dari folder `components`.
+2. **Penentuan Titik Awal (Start Node)**:
+    - Memanggil fungsi `creating_nodes.createNo(type=1)`.
+    - Program mengambil ID node dan koordinat posisi awal.
+3. **Penentuan Titik Tujuan (Goal Node)**:
+    - Memanggil fungsi `creating_nodes.createNo(type=2)`.
+    - Program mengambil ID node dan koordinat posisi tujuan.
+4. **Pencarian Rute (Pathfinding)**:
+    - Fungsi `aSTAR.find_path()` dipanggil dengan parameter: ID Awal, ID Tujuan, Koordinat Awal, dan Koordinat Tujuan.
+    - Algoritma A* bekerja dengan memanfaatkan fungsi heuristik dan pengecekan *neighbor* dari `helper.py`.
+5. **Output Hasil**:
+    - Jika jalur ditemukan (`if path:`), program mencetak "path found".
+    - Jika gagal, program mencetak "error".
