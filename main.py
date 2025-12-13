@@ -1,15 +1,18 @@
 # External libraries
+print("importing..")
 import osmnx as ox
 import matplotlib.pyplot as plt
 import folium
 import contextily as cx
 import pandas as pd
 import random
+print("dependencies..")
 from numpy import sin, cos, arccos, pi, round
 # Internal Import
 import components
 from components import aSTAR, creating_nodes, helper
 
+print("starting")
 start_pos = creating_nodes.createNo(type=1)
 start_pos_data = start_pos[1]
 start_pos_id = start_pos_data['id']

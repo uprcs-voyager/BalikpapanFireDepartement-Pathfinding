@@ -81,3 +81,4 @@ def find_path(start_id: Tuple[float], goal_id: Tuple[float], start_coordinate: T
 
 # no path found
     return[] 
+
