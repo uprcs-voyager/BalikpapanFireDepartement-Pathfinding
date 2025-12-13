@@ -1,9 +1,10 @@
 # Steps 
 ## 1 Mengimport library yang dibutuhkan 
 Sebelum memulai project kita harus mengimport library-library yang dibutuhkan yaitu : 
-- osmnx
-- matplotlib
-- folium (optional)
+- osmnx: Untuk mengambil dan memproses data peta jalan.
+- matplotlib: Untuk plotting grafik statis.
+- folium: Untuk visualisasi peta interaktif. (Optional)
+- contextily: Untuk menambahkan basemap pada plot geospasial.
 
 ## 2 Mendownload / menyiapkan data yang dibutuhkan 
 Data - data yang dibutuhkan adalah : 
@@ -17,14 +18,19 @@ Pengambilan map balikpapan dilakukan dengan cara mendownload terlebih dahulu fil
    4. Lebar jalanan (width)
    5. Kepadatan jalanan (traffic density)
 
-## 3. Menginspeksi data yang ada
-Setelah data-data yang dibutuhkan sudah di siapkan, langkah selanjutnya yang dilakukan adalah menginspeksi data-data yang ada. Sepert, melihat attribute apa saja yang ada pada nodes dan edges 
+## 3. Menjalankan Program Utama
+Setelah instalasi dan data siap, jalankan file main.py. Berikut adalah detail proses yang terjadi di balik layar
+1. Generate Nodes
+Kode akan memanggil fungsi createNo dua kali:
+- Type 1 (Start Node): Memilih satu node secara acak (atau ditentukan) dari graf sebagai titik keberangkatan.
+- Type 2 (Goal Node): Memilih satu node lain sebagai titik tujuan.
+Output: ID Node dan Koordinat (Latitude, Longitude) ditampilkan di terminal.
 
-## 4. Menyiapkan heuristic function 
-Selanjutnya adalah mengambil 2 random node dari data yang ada lalu menentukan jarak dari kedua node tersebut menggunakan haversine formula. jarak antara kedua node tersebut nantinya dapat digunakan untuk menyiapkan algoritma A*
+2. Proses A* (A-Star Calculation)
+Setelah Start dan Goal didapatkan, fungsi aSTAR.find_path dijalankan:
+- Perhitungan Heuristik: Menggunakan Haversine Formula (dari helper.py) untuk memperkirakan jarak lurus dari node saat ini ke tujuan.
+- Eksplorasi Neighbor: Program mengecek tetangga node yang bisa dilewati.
+- Evaluasi Cost: Menghitung F = G + H (Jarak tempuh + Heuristik). Node dengan F terkecil akan dipilih untuk langkah selanjutnya.
 
-## 5. Membuat kode untuk melihat neighbor apa saja yang tersedia pada suatu node
-setelah mendapatkan node awal dan node akhir. Kita perlu mengetahui neighbor apa saja yang dapat dilewati oleh node 1.
-
-## 6. 
-
+3. Hasil Akhir
+Jika rute berhasil direkonstruksi, terminal akan menampilkan pesan "path found".
