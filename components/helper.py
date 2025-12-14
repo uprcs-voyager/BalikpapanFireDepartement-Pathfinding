@@ -120,3 +120,37 @@ def reconstruct_path (goal_node: Dict) -> List[Tuple[int]] :
 
     track = path[::-1]
     return track
+
+
+# =============================== Menampilkan nama-nama jalan yang telah/harus di ambil berdasarkan rute yang dipilih =============
+def getting_taken_road_info(path, G) : 
+    instruction = []
+
+    for i in range(len(path)-1) :
+        u, v = path[i], path[i+1]
+        # take edge data
+        edge_data = G.get_edge_data(u, v)
+        if edge_data :
+            edge_info = edge_data[0]  #getting the first edge
+            road_name = edge_info.get('name', 'Unnamed Road') #getting the road names
+
+            if isinstance(road_name, list) :
+                road_name = ','.join(str(n) for n in road_name)
+            
+            # getting distance and speed
+            distance = edge_info['length']
+            speed = get_speed_from_edges(edge_info)
+            time = distance/speed
+            distance_speed_data = {
+                'segment' : i+1,
+                'road' : road_name,
+                'distance' : distance,
+                'time' : time,
+                'start_node' : u,
+                'end_node' : v,
+
+            }
+
+            instruction.append(distance_speed_data)
+    
+    return instruction

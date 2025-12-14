@@ -1,5 +1,5 @@
 # External libraries
-print("importing..")
+print("\nimporting..")
 import osmnx as ox
 import matplotlib.pyplot as plt
 import folium
@@ -16,14 +16,14 @@ from components.fire_station import get_fire_stations_nodes, get_closest_fire_st
 
 
 
-print("starting")
+print("\nstarting")
 # Creating the goal node
 print()
 goal_pos = creating_nodes.createNo(type=2)
 goal_pos_data = goal_pos[1]
 goal_pos_id = goal_pos_data['id']
 goal_pos_coordinate = goal_pos_data['position']
-print(f"goal Pos ID: {goal_pos_id}")
+# print(f"goal Pos ID: {goal_pos_id}")
 print(goal_pos)
 
 
@@ -36,17 +36,18 @@ print(f"\nFound {len(fire_station_nodes)} fire station :  ")
 for name in fire_station_nodes.keys() :
     print(f" - {name}")
 closest_fire_station_to_target = get_closest_fire_station_to_target(goal_pos_coordinate, fire_station_nodes, G)
+
 start_id = closest_fire_station_to_target['node_id']
 start_coordinate = (G.nodes[start_id]['y'], G.nodes[start_id]['x'])
 
 
 
 
-print(start_coordinate)
-print(goal_pos_coordinate)
+# print(start_coordinate)
+# print(goal_pos_coordinate)
 
-print(f"emergency was found in : {goal_pos_coordinate}")
-print(f"The nearest fire station choosen is: {closest_fire_station_to_target['name']} || with the distance of {closest_fire_station_to_target['distance']/1000:.2f} KM to the target")
+print(f"\n\nemergency was found in : {goal_pos_coordinate}")
+print(f"The nearest fire station choosen is: {closest_fire_station_to_target['name']} || with the distance of {closest_fire_station_to_target['distance']/1000:.2f} KM to the target || koordinat: {start_coordinate}")
 
 path = aSTAR.find_path(start_id, goal_pos_id, start_coordinate, goal_pos_coordinate)
 
