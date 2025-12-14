@@ -13,9 +13,6 @@ import components
 from components import aSTAR, creating_nodes, helper, fire_station
 from components.fire_station import get_fire_stations_nodes, get_closest_fire_station_to_target, fire_station
 
-
-
-
 print("\nstarting")
 # Creating the goal node
 print()
@@ -25,8 +22,6 @@ goal_pos_id = goal_pos_data['id']
 goal_pos_coordinate = goal_pos_data['position']
 # print(f"goal Pos ID: {goal_pos_id}")
 print(goal_pos)
-
-
 
 # Choosing the nearest fire station corresponding to the goal
 G = ox.load_graphml('Balikpapan_map_graph.graphml')
@@ -40,11 +35,10 @@ closest_fire_station_to_target = get_closest_fire_station_to_target(goal_pos_coo
 start_id = closest_fire_station_to_target['node_id']
 start_coordinate = (G.nodes[start_id]['y'], G.nodes[start_id]['x'])
 
-
 # print(start_coordinate)
 # print(goal_pos_coordinate)
 print("\n" + "="*50)
-print("       LAPORAN DETEKSI LOKASI DARURAT")
+print("       LAPORAN LOKASI DARURAT")
 print("="*50)
 print(f"Lokasi Kejadian (Emergency) : {goal_pos_coordinate}")
 print(f"Pos Pemadam Terpilih        : {closest_fire_station_to_target['name']}")
