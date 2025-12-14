@@ -1,5 +1,6 @@
 import osmnx as ox 
 import matplotlib.pyplot as plt
+
 # print("importing..")
 import osmnx as ox
 import matplotlib.pyplot as plt
@@ -7,8 +8,10 @@ import folium
 import contextily as cx
 import pandas as pd
 import random
+
 # print("dependencies..")
 from numpy import sin, cos, arccos, pi, round
+
 # Internal Import
 import components
 from components import aSTAR, creating_nodes, helper
@@ -42,25 +45,19 @@ else :
 
 # ====== KODE UNTUK MENEUNJUKAN NODE YANG TIDAK DIGUNAKAN =========================
 
-
-
-
-
-
-
-
 # ================== Setting tampilan graph =========================================
 G_explored = G.subgraph(closed_set)
 abandoned_nodes = list(closed_set - set(final_path))
+
 figure, ax = ox.plot_graph(
     G, 
     show= False, 
     close= False, 
-    edge_color="#5E5E5E", 
+    edge_color="#3A3A3A", 
     edge_linewidth=1,
     node_size=0,
     bgcolor='black',
-    figsize=(24,24)
+    figsize=(15,15)
 )
 
 ox.plot_graph(
@@ -79,26 +76,23 @@ start_y = G.nodes[start_id]['y']
 goal_x = G.nodes[goal_pos_id]['x']
 goal_y = G.nodes[goal_pos_id]['y']
 
-# Adding start marker whcih is the fire station
-ax.scatter(start_x, start_y, c='orange', s=400, marker='.', edgecolors='white', linewidths=1, zorder=10, label='Fire Station')
+## Marker Start & Goal
 
+text_offset_y = 0.0004
+# Adding start marker whcih is the fire station
+ax.scatter(start_x, start_y, c='orange', s=100, marker='o', edgecolors='white', linewidths=1, zorder=10, label='Pos Pemadam')
 # Adding goal marker whcih is the emergency location
-ax.scatter(goal_x, goal_y, c='red', s=400, marker='.', edgecolors='white', linewidths=1, zorder=10, label='Emergency')
+ax.scatter(goal_x, goal_y, c='red', s=100, marker='o', edgecolors='white', linewidths=1, zorder=10, label='Lokasi Kebakaran')
 
 # Menambahkan text label 
 # Label statsiun kebakaran
-station_name = closest_fire_station_to_target['name']
-ax.text(start_x, start_y, f'\n{station_name}', fontsize=10, ha='center', color='white', bbox=dict(boxstyle='round', facecolor='orange', alpha=0.7))
-# label lokasi emergency
-ax.text(goal_x, goal_y, '\nEmergency Location', fontsize=10, ha='center', color='white', bbox=dict(boxstyle='round', facecolor='red', alpha=0.7))
-ax.legend(loc='upper right', fontsize=12)
+station_name_raw = closest_fire_station_to_target['name']
+station_name_display = station_name_raw.replace("_", " ").title()
+ax.text(start_x, start_y, f'\n{station_name_display}', fontsize=8, fontweight='bold', ha='center', va='bottom', color='white', zorder=20, bbox=dict(boxstyle='round', pad=0.3, facecolor='orange', alpha=0.9))
+ax.text(goal_x, goal_y, '\nLOKASI KEJADIAN', fontsize=8, fontweight='bold', ha='center', va='bottom', color='white', zorder=20, bbox=dict(boxstyle='round', pad=0.3, facecolor='red', alpha=0.9))
+
+ax.legend(loc='upper right', fontsize=10, shadow=True, facecolor='white', framealpha=1)
 # ================== Setting tampilan graph =========================================
-
-
-
-
-
-
 
 # ================================= Mendapatkan data total jarak yang ditempuh dan waktu yang dihabiskan pada suatu rute yag telah dipilih ===============
 total_time = 0
@@ -117,48 +111,71 @@ for i in range (len(final_path)-1) :
 # ================================= Mendapatkan data total jarak yang ditempuh dan waktu yang dihabiskan pada suatu rute yag telah dipilih ===============
 
 
-
-
-
-
-
 # =============================== Menampilkan nama-nama jalan yang telah/harus di ambil berdasarkan rute yang dipilih =============
 instruction = getting_taken_road_info(final_path, G)
 current_road = None
-route_steps = 0
-print("===== HARAP IKUTI PANDUAN JALAN INI =====")
-for i in instruction : 
-    road = i['road']
-    if road != current_road :
+route_steps = 1
+labels_to_plot = []
+
+print("\n" + "="*60)
+print(f"PANDUAN NAVIGASI DARI: {station_name_display.upper()}")
+print("="*60)
+
+for i, step in enumerate(instruction):
+    raw_road = step['road']
+
+    # Handle list names (e.g. ['Jalan A', 'Jalan A'])
+    if isinstance(raw_road, list):
+        road_name_str = str(raw_road[0])
+    else:
+        road_name_str = str(raw_road)
+
+    node_id_check = final_path[i] 
+    node_x = G.nodes[node_id_check]['x']
+    node_y = G.nodes[node_id_check]['y']
+
+    if road_name_str != current_road:
         if current_road is not None:
-            print(f"\n{route_steps}. Follow {current_road}")
+            print(f"{route_steps}. Ikuti jalan {current_road}")
+            route_steps += 1
+        invalid_keywords = ["unnamed", "tidak bernama", "unknown"]
+        is_valid_name = len(road_name_str) > 2 and (not any(x in road_name_str.lower() for x in invalid_keywords))
+
+        if is_valid_name:
+            labels_to_plot.append((node_x, node_y, road_name_str))
+        current_road = road_name_str
+
+if current_road is not None:
+    print(f"{route_steps}. Ikuti jalan {current_road} hingga tujuan")
+
+print("-" * 60)
+print("RINGKASAN PERJALANAN")
+print(f"Estimasi Waktu Tempuh : {total_time/60:.2f} Menit")
+print(f"Total Jarak Tempuh    : {total_distance/1000:.2f} KM")
+print("=" * 60 + "\n")
+
+# print("===== HARAP IKUTI PANDUAN JALAN INI =====")
+# for i in instruction : 
+#     road = i['road']
+#     if road != current_road :
+#         if current_road is not None:
+#             print(f"\n{route_steps}. Follow {current_road}")
 
 
-        current_road = road
-        route_steps += 1
+#         current_road = road
+#         route_steps += 1
 
-if current_road is not None : 
-    print(f"\n{route_steps}. Follow {current_road}")
+# if current_road is not None : 
+#     print(f"\n{route_steps}. Follow {current_road}")
 
-print()
-print()
-print("===== INFO MENGENAI WAKTU DAN JARAK DARI RUTE YANG TELAH DIPILIH =====")
-print(f"Total time: {total_time/60:.2f} Minutes")
-print(f"Total distance : {total_distance/1000:.2f} KM")
-print()
-print()
+# print()
+# print()
+# print("===== INFO MENGENAI WAKTU DAN JARAK DARI RUTE YANG TELAH DIPILIH =====")
+# print(f"Total time: {total_time/60:.2f} Minutes")
+# print(f"Total distance : {total_distance/1000:.2f} KM")
+# print()
+# print()
 # =============================== Menampilkan nama-nama jalan yang telah/harus di ambil berdasarkan rute yang dipilih =============
-
-
-
-
-
-
-
-
-
-
-
 
 
 # ==================== MENAMPILKAN GAMBAR BERISI RUTE YANG DIPILIH ================================
@@ -167,13 +184,34 @@ if final_path :
         G, 
         final_path,
         route_color='green', 
-        route_linewidth=4, 
+        route_linewidth=5, 
         route_alpha=1.0, 
         orig_dest_size=100, 
         ax=ax,
+        show=False,
+        close=False
     )
 
+# ================= PLOTTING LABEL JALAN DI PETA ===============================
+# Menambahkan teks nama jalan langsung di atas peta
+seen_labels = set()
 
+for x, y, road_name in labels_to_plot:
+    if road_name not in seen_labels:
+        offset_y = 0.0001
+        ax.text(
+            x, y, 
+            road_name, 
+            fontsize=7, 
+            color="#000000",
+            ha='center', 
+            va='center',
+            rotation=0,
+            fontweight='bold',
+            zorder=30,
+            bbox=dict(boxstyle='round ,pad=0.1', fc='white', ec='black', alpha=0.8) # Background kotak hitam transparan
+        )
+        seen_labels.add(road_name)
 
 
 # ================= Menampilkan title-title agar plot lebih informatif ========================
@@ -181,7 +219,8 @@ title_text = f"Rute Departemen Pemadam kebakaran menuju lokasi emergency dengan 
 title_text += f"Dari: {closest_fire_station_to_target['name']}\n"
 title_text += f"Total Jarak Tempuh: {total_distance/1000:.2f} KM\n"
 title_text += f"Total Waktu Dihabiskan: {total_time/60:.2f} Minutes\n"
-ax.set_title(title_text, fontsize=12, color='green')
+
+ax.set_title(title_text, fontsize=14, color='white', pad=20)
 # ================= Menampilkan title-title agar plot lebih informatif ========================
 
 plt.show()

@@ -32,7 +32,7 @@ print(goal_pos)
 G = ox.load_graphml('Balikpapan_map_graph.graphml')
 fire_station_nodes = get_fire_stations_nodes(G, fire_station)
 # debugging
-print(f"\nFound {len(fire_station_nodes)} fire station :  ")
+print(f"\n[SISTEM] Ditemukan {len(fire_station_nodes)} titik Pos Pemadam Kebakaran dalam database.")
 for name in fire_station_nodes.keys() :
     print(f" - {name}")
 closest_fire_station_to_target = get_closest_fire_station_to_target(goal_pos_coordinate, fire_station_nodes, G)
@@ -41,14 +41,18 @@ start_id = closest_fire_station_to_target['node_id']
 start_coordinate = (G.nodes[start_id]['y'], G.nodes[start_id]['x'])
 
 
-
-
 # print(start_coordinate)
 # print(goal_pos_coordinate)
+print("\n" + "="*50)
+print("       LAPORAN DETEKSI LOKASI DARURAT")
+print("="*50)
+print(f"Lokasi Kejadian (Emergency) : {goal_pos_coordinate}")
+print(f"Pos Pemadam Terpilih        : {closest_fire_station_to_target['name']}")
+print(f"Jarak Lurus (Euclidean)     : {closest_fire_station_to_target['distance']/1000:.2f} KM")
+print(f"Koordinat Pos Pemadam       : {start_coordinate}")
+print("="*50 + "\n")
 
-print(f"\n\nemergency was found in : {goal_pos_coordinate}")
-print(f"The nearest fire station choosen is: {closest_fire_station_to_target['name']} || with the distance of {closest_fire_station_to_target['distance']/1000:.2f} KM to the target || koordinat: {start_coordinate}")
-
+print("[SISTEM] Sedang menghitung rute terbaik menggunakan A*...")
 path = aSTAR.find_path(start_id, goal_pos_id, start_coordinate, goal_pos_coordinate)
 
 
