@@ -38,7 +38,7 @@ def createNo(type, position: Tuple[float] = 0, g: float = float(0), h: float = 0
         node2_longitude = node2_data['x']
         location2 = (node2_latitude, node2_longitude)
         node2_id = node2
-        data2 = print(f"Node 2 yang terpilih memiliki ID = || {node2_id} || dengan data  {node2_data} || latitude = {node2_latitude}, longitude = {node2_longitude}")
+        data2 = print(f"Node target (emergency) yang terpilih memiliki ID = || {node2_id} || dengan data  {node2_data} || latitude = {node2_latitude}, longitude = {node2_longitude}")
         dict2 = {
             'id' : node2_id,
             'position' : location2,
@@ -47,6 +47,7 @@ def createNo(type, position: Tuple[float] = 0, g: float = float(0), h: float = 0
 
     if type == 3 :
         return {
+        'id'
         'position': position,
         'g': g,
         'h': h,
@@ -56,4 +57,14 @@ def createNo(type, position: Tuple[float] = 0, g: float = float(0), h: float = 0
 
     else : 
         print("Only use value between 1 and 2")
+
+def neighbour(id, position: Tuple[float] = 0, g: float = float(0), h: float = 0.0, parent: Dict = None) : 
+      return {
+        'id' : id,
+        'position': position,
+        'g': g,
+        'h': h,
+        'f': g + h,
+        'parent': parent
+        }
 

@@ -1,55 +1,46 @@
-# External libraries
-print("importing..")
+import osmnx as ox 
+import matplotlib.pyplot as plt
+# print("importing..")
 import osmnx as ox
 import matplotlib.pyplot as plt
 import folium
 import contextily as cx
 import pandas as pd
 import random
-print("dependencies..")
+# print("dependencies..")
 from numpy import sin, cos, arccos, pi, round
 # Internal Import
 import components
 from components import aSTAR, creating_nodes, helper
-
-print("starting")
-start_pos = creating_nodes.createNo(type=1)
-start_pos_data = start_pos[1]
-start_pos_id = start_pos_data['id']
-start_pos_coordinate = start_pos_data['position']
-print(f"start Pos ID: {start_pos_id}")
-print(start_pos)
-
-
+from components.initialization import path, start_id, goal_pos_id, closest_fire_station_to_target
+from components.helper import getting_taken_road_info
 print()
 
+G = ox.load_graphml('Balikpapan_map_graph.graphml')
 
-goal_pos = creating_nodes.createNo(type=2)
-goal_pos_data = goal_pos[1]
-goal_pos_id = goal_pos_data['id']
-goal_pos_coordinate = goal_pos_data['position']
-print(f"goal Pos ID: {goal_pos_id}")
-print(goal_pos)
-print(start_pos_coordinate)
-print(goal_pos_coordinate)
+hasil_pencarian = path
+if hasil_pencarian :
+    final_path = hasil_pencarian[0]
+    closed_set = hasil_pencarian[1]
+else : 
+    print("Something is wrong")
 
-path = aSTAR.find_path(start_pos_id, goal_pos_id, start_pos_coordinate, goal_pos_coordinate)
+# ====== KODE UNTUK MENEUNJUKAN NODE YANG TIDAK DIGUNAKAN =========================
 
-if path :
-    print("path found")
-else :
-    print("error")
+# abandoned_nodes_x = []
+# abandoned_nodes_y = []
 
+# if abandoned_nodes : 
+#     for node in abandoned_nodes : 
+#         koordinat_x = G.nodes[node]['x']
+#         abandoned_nodes_x.append(koordinat_x)
 
+#     for node in abandoned_nodes : 
+#         koordinat_y = G.nodes[node]['y']
+#         abandoned_nodes_y.append(koordinat_y)
+# ax.scatter(abandoned_nodes_x, abandoned_nodes_y, c='red', s=15, alpha=0.6, label='abandoned/explored', zorder=2)
 
-
-
-
-
-
-
-
-
+# ====== KODE UNTUK MENEUNJUKAN NODE YANG TIDAK DIGUNAKAN =========================
 
 
 
@@ -58,6 +49,50 @@ else :
 
 
 
+# ================== Setting tampilan graph =========================================
+G_explored = G.subgraph(closed_set)
+abandoned_nodes = list(closed_set - set(final_path))
+figure, ax = ox.plot_graph(
+    G, 
+    show= False, 
+    close= False, 
+    edge_color="#5E5E5E", 
+    edge_linewidth=1,
+    node_size=0,
+    bgcolor='black',
+    figsize=(24,24)
+)
+
+ox.plot_graph(
+    G_explored, 
+    ax=ax,
+    show=False, 
+    close=False, 
+    edge_color='#F4D03F',
+    edge_linewidth=0.3, 
+    node_size=0
+)
+
+
+start_x = G.nodes[start_id]['x']
+start_y = G.nodes[start_id]['y']
+goal_x = G.nodes[goal_pos_id]['x']
+goal_y = G.nodes[goal_pos_id]['y']
+
+# Adding start marker whcih is the fire station
+ax.scatter(start_x, start_y, c='orange', s=400, marker='.', edgecolors='white', linewidths=1, zorder=10, label='Fire Station')
+
+# Adding goal marker whcih is the emergency location
+ax.scatter(goal_x, goal_y, c='red', s=400, marker='.', edgecolors='white', linewidths=1, zorder=10, label='Emergency')
+
+# Menambahkan text label 
+# Label statsiun kebakaran
+station_name = closest_fire_station_to_target['name']
+ax.text(start_x, start_y, f'\n{station_name}', fontsize=10, ha='center', color='white', bbox=dict(boxstyle='round', facecolor='orange', alpha=0.7))
+# label lokasi emergency
+ax.text(goal_x, goal_y, '\nEmergency Location', fontsize=10, ha='center', color='white', bbox=dict(boxstyle='round', facecolor='red', alpha=0.7))
+ax.legend(loc='upper right', fontsize=12)
+# ================== Setting tampilan graph =========================================
 
 
 
@@ -65,106 +100,54 @@ else :
 
 
 
-# print("========================================================================Partial Data Inspection==============================================================================================")
-# print()
-# G = ox.load_graphml("Balikpapan_map_graph.graphml")
-# nodes, edges = ox.graph_to_gdfs(G)
-# print("Available data columns: ", edges.columns)
-# print("========================================================")
-# print()
-# print("========================================================")
-# print("Nodes GeoDataFrame head:")
-# print(nodes.head(5))
-# print()
-# print()
-# print("========================================================")
-# columnsToShow = ['name', 'highway', 'length', 'maxspeed', 'lanes', 'oneway', 'width', 'junction', 'bridge', 'access']
-# print("edges GeoDataFrame head with specific columns: ")
-# print(edges[columnsToShow].head(5))
-# print()
-# print("=========================================================================Partial Data Inspection======================================================================================================")
-# print("\n\n\n\n\n\n\n\n")
+# ================================= Mendapatkan data total jarak yang ditempuh dan waktu yang dihabiskan pada suatu rute yag telah dipilih ===============
+total_time = 0
+total_distance = 0
 
-# def rad_to_degree(radians) :
-#     degrees = radians * 180 / pi
-#     return degrees
+for i in range (len(final_path)-1) :
+    u, v = final_path[i], final_path[i+1]
+    edge_data = G.get_edge_data(u,v)[0]
 
-# def degree_to_rad(degrees) :
-#     radians = degrees * pi /180
-#     return radians
+    distance = edge_data['length']
+    speed_mps = helper.get_speed_from_edges(edge_data)
+    time = distance/speed_mps
 
-# def getDistanceBetweenTwoPoints(latitude1, longitude1, latitude2, longitude2) :
-#     theta  = longitude1 - longitude2
-#     distance  = 60 * 1.1515 * rad_to_degree(
-#         arccos(
-#         (sin(degree_to_rad(latitude1)) * sin(degree_to_rad(latitude2))) + 
-#         (cos(degree_to_rad(latitude1)) * cos(degree_to_rad(latitude2)) * cos(degree_to_rad(theta)))
-#     )
-#     )
-
-#     return round(distance * 1609.34, 2)
-
-# def gettingNeighborLength(node) :
-#     for v in G.neighbors(node) : 
-#         for key, data in G.get_edge_data(node, v).items() :
-#             node_data = G.nodes[node]
-#             edge_lenght = data['length']
-#             # node_latitude = node_data['y']
-#             # node_longitude = node_data['x']
-#             print(f"Jarak dari node {node}  ke node {v} dengan key = {key} adalah {edge_lenght:.2f} Meter ")
+    total_time += time
+    total_distance += distance
+# ================================= Mendapatkan data total jarak yang ditempuh dan waktu yang dihabiskan pada suatu rute yag telah dipilih ===============
 
 
 
-# # ====================================== NODE 1 DATA =====================================
-# # Mengambil node pertama secara random dari list node yang ada 
-# # Node1 akan menjadi titik mulai
-# node_ids = list(G.nodes())
-# node1 = random.choice(node_ids)
-# node1_data = G.nodes[node1]
-# node1_latitude = node1_data['y']
-# node1_longitude = node1_data['x']
-# node1_id = node1
-# # seeing available neighbor for node 1 
-# neighborsN1 = list(G.neighbors(node1))
-# # getting the neighbor lenght
-# # for v1 in G.neighbors(node1) : 
-# #     for key1, data1 in G.get_edge_data(node1, v1).items() :
-# #         edge1_lenght = data1['lenght']
-# #         print(f"Jarak dari node {node1} ke node {v1} dengan key = {key1} adalah {edge1_lenght:.2f} Meter")
-# # ====================================== NODE 1 DATA =====================================
 
 
-# # ====================================== NODE 2 DATA =====================================
-# # Mengambil node kedua secara random dari list node yang ada
-# # Node kedua akan menjadi titik mulai 
-# node2 = random.choice(node_ids)
-# node2_data = G.nodes[node2]
-# node2_latitude = node2_data['y']
-# node2_longitude = node2_data['x']
-# node2_id = node2
-# # seeing available neighbor for node 2 
-# neighborsN2 = list(G.neighbors(node2))
-# # ====================================== NODE 2 DATA =====================================
 
 
-# print("===============================================================================The Main Content=================================================================================================================")
-# print()
-# print(f"Node 1 yang terpilih memiliki ID = || {node1} || dengan data  {node1_data} || latitude = {node1_latitude}, longitude = {node1_longitude}")
-# print(f"Node 2 yang terpilih memiliki ID = || {node2} || dengan data  {node2_data} || latitude = {node2_latitude}, longitude = {node2_longitude}")
-# jarak_antara_start_end  = getDistanceBetweenTwoPoints(node1_latitude, node1_longitude, node2_latitude, node2_longitude)
-# jarak_antara_start_end_KM = round(jarak_antara_start_end * 0.001, 2)
-# print(f"Jarak antara node 1 yang memiliki ID {node1_id} dan node 2 yang memiliki id {node2_id} adalah : {jarak_antara_start_end} Meter  / {jarak_antara_start_end_KM} KM")
+# =============================== Menampilkan nama-nama jalan yang telah/harus di ambil berdasarkan rute yang dipilih =============
+instruction = getting_taken_road_info(final_path, G)
+current_road = None
+route_steps = 0
+print("===== HARAP IKUTI PANDUAN JALAN INI =====")
+for i in instruction : 
+    road = i['road']
+    if road != current_road :
+        if current_road is not None:
+            print(f"\n{route_steps}. Follow {current_road}")
 
 
-# # ====================================== NODE 1 & 2 Neighbors =====================================
-# print(f"\nBerikut adalah daftar tetangga yang tersedia pada node 1 : {neighborsN1}\nBerikut adalah daftar tetangga yang tersedia pada node 2 : {neighborsN2} ")
-# print()
-# print("Berikut adalah jarak antar node yang tersedia\n ")
-# print("Node Awal (Starting Node): ")
-# node1NeighborLength = gettingNeighborLength(node1)
-# print()
-# print("Node Akhir (Final Node): ")
-# node2NeighborLength = gettingNeighborLength(node2)
+        current_road = road
+        route_steps += 1
+
+if current_road is not None : 
+    print(f"\n{route_steps}. Follow {current_road}")
+
+print()
+print()
+print("===== INFO MENGENAI WAKTU DAN JARAK DARI RUTE YANG TELAH DIPILIH =====")
+print(f"Total time: {total_time/60:.2f} Minutes")
+print(f"Total distance : {total_distance/1000:.2f} KM")
+print()
+print()
+# =============================== Menampilkan nama-nama jalan yang telah/harus di ambil berdasarkan rute yang dipilih =============
 
 
 
@@ -178,12 +161,29 @@ else :
 
 
 
+# ==================== MENAMPILKAN GAMBAR BERISI RUTE YANG DIPILIH ================================
+if final_path :
+    ox.plot_graph_route(
+        G, 
+        final_path,
+        route_color='green', 
+        route_linewidth=4, 
+        route_alpha=1.0, 
+        orig_dest_size=100, 
+        ax=ax,
+    )
 
 
 
 
+# ================= Menampilkan title-title agar plot lebih informatif ========================
+title_text = f"Rute Departemen Pemadam kebakaran menuju lokasi emergency dengan menggunakan Algoritma A*\n"
+title_text += f"Dari: {closest_fire_station_to_target['name']}\n"
+title_text += f"Total Jarak Tempuh: {total_distance/1000:.2f} KM\n"
+title_text += f"Total Waktu Dihabiskan: {total_time/60:.2f} Minutes\n"
+ax.set_title(title_text, fontsize=12, color='green')
+# ================= Menampilkan title-title agar plot lebih informatif ========================
 
-
-print("\n\n\n\n")
-
+plt.show()
+# ==================== MENAMPILKAN GAMBAR BERISI RUTE YANG DIPILIH ================================
 
