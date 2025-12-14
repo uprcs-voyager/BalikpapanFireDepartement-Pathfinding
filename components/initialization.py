@@ -16,17 +16,7 @@ from components.fire_station import get_fire_stations_nodes, get_closest_fire_st
 
 
 
-
 print("starting")
-# start_pos = creating_nodes.createNo(type=1)
-# start_pos_data = start_pos[1]
-# start_pos_id = start_pos_data['id']
-# start_pos_coordinate = start_pos_data['position']
-# print(f"start Pos ID: {start_pos_id}")
-# print(start_pos)
-
-
-
 # Creating the goal node
 print()
 goal_pos = creating_nodes.createNo(type=2)

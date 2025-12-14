@@ -1,34 +1,53 @@
 import osmnx as ox 
 import matplotlib.pyplot as plt
-print("importing..")
+# print("importing..")
 import osmnx as ox
 import matplotlib.pyplot as plt
 import folium
 import contextily as cx
 import pandas as pd
 import random
-print("dependencies..")
+# print("dependencies..")
 from numpy import sin, cos, arccos, pi, round
 # Internal Import
 import components
 from components import aSTAR, creating_nodes, helper
-from components.initialization import path
+from components.initialization import path, start_id, goal_pos_id, closest_fire_station_to_target
 
 
 G = ox.load_graphml('Balikpapan_map_graph.graphml')
 
 hasil_pencarian = path
-
 if hasil_pencarian :
     final_path = hasil_pencarian[0]
     closed_set = hasil_pencarian[1]
 else : 
     print("Something is wrong")
 
+# ====== KODE UNTUK MENEUNJUKAN NODE YANG TIDAK DIGUNAKAN =========================
+
+# abandoned_nodes_x = []
+# abandoned_nodes_y = []
+
+# if abandoned_nodes : 
+#     for node in abandoned_nodes : 
+#         koordinat_x = G.nodes[node]['x']
+#         abandoned_nodes_x.append(koordinat_x)
+
+#     for node in abandoned_nodes : 
+#         koordinat_y = G.nodes[node]['y']
+#         abandoned_nodes_y.append(koordinat_y)
+# ax.scatter(abandoned_nodes_x, abandoned_nodes_y, c='red', s=15, alpha=0.6, label='abandoned/explored', zorder=2)
+
+# ====== KODE UNTUK MENEUNJUKAN NODE YANG TIDAK DIGUNAKAN =========================
+
+
+# ================== Setting tampilan graph =========================================
 G_explored = G.subgraph(closed_set)
 
-abandoned_nodes = list(closed_set - set(final_path))
 
+
+abandoned_nodes = list(closed_set - set(final_path))
 figure, ax = ox.plot_graph(
     G, 
     show= False, 
@@ -51,20 +70,34 @@ ox.plot_graph(
 )
 
 
-# abandoned_nodes_x = []
-# abandoned_nodes_y = []
+start_x = G.nodes[start_id]['x']
+start_y = G.nodes[start_id]['y']
+goal_x = G.nodes[goal_pos_id]['x']
+goal_y = G.nodes[goal_pos_id]['y']
 
-# if abandoned_nodes : 
-#     for node in abandoned_nodes : 
-#         koordinat_x = G.nodes[node]['x']
-#         abandoned_nodes_x.append(koordinat_x)
+# Adding start marker whcih is the fire station
+ax.scatter(start_x, start_y, c='red', s=400, marker='.', edgecolors='white', linewidths=2, zorder=10, label='Fire Station')
 
-#     for node in abandoned_nodes : 
-#         koordinat_y = G.nodes[node]['y']
-#         abandoned_nodes_y.append(koordinat_y)
-# ax.scatter(abandoned_nodes_x, abandoned_nodes_y, c='red', s=15, alpha=0.6, label='abandoned/explored', zorder=2)
+# Adding goal marker whcih is the emergency location
+ax.scatter(goal_x, goal_y, c='orange', s=400, marker='.', edgecolors='white', linewidths=2, zorder=10, label='Emergency')
+
+# Menambahkan text label 
+# Label statsiun kebakaran
+station_name = closest_fire_station_to_target['name']
+ax.text(start_x, start_y, f'\n{station_name}', fontsize=10, ha='center', color='white', bbox=dict(boxstyle='round', facecolor='orange', alpha=0.7))
+# label lokasi emergency
+ax.text(goal_x, goal_y, '\nEmergency Location', fontsize=10, ha='center', color='white', bbox=dict(boxstyle='round', facecolor='red', alpha=0.7))
+ax.legend(loc='upper right', fontsize=12)
 
 
+
+
+
+
+# ================== Setting tampilan graph =========================================
+
+
+# ================================= Mendapatkan data total jarak yang ditempuh dan waktu yang dihabiskan pada suatu rute yag telah dipilih ===============
 total_time = 0
 total_distance = 0
 
@@ -81,9 +114,11 @@ for i in range (len(final_path)-1) :
 
 print(f"Total time: {total_time/60:.2f} Minutes")
 print(f"Total distance : {total_distance/1000:.2f} KM")
+# ================================= Mendapatkan data total jarak yang ditempuh dan waktu yang dihabiskan pada suatu rute yag telah dipilih ===============
 
 
 
+# ==================== MENAMPILKAN GAMBAR BERISI RUTE YANG DIPILIH ================================
 if final_path :
     ox.plot_graph_route(
         G, 
@@ -96,4 +131,5 @@ if final_path :
     )
 
 plt.show()
+# ==================== MENAMPILKAN GAMBAR BERISI RUTE YANG DIPILIH ================================
 

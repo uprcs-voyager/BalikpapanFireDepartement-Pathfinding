@@ -7,6 +7,7 @@ import random
 from numpy import sin, cos, arccos, pi, round
 from typing import List, Tuple, Dict, Set
 
+
 default_speed_KM = {
         'motorway': 100,
         'trunk': 80,
@@ -19,7 +20,6 @@ default_speed_KM = {
     }
 # diubah ke meter per detik
 GLOBAL_MAX_SPEED_MPS = 90 / 3.6
-
 
 
 def rad_to_degree(radians) :
@@ -46,6 +46,7 @@ def calculateHeuristic_length(pos1: Tuple[float, float], pos2: Tuple[float, floa
     # the returned value will be in meters
     return round(distance * 1609.34, 2)
 
+
 def calculateHeuristic_time(pos1: Tuple[float, float], pos2: Tuple[float, float]) -> float :
     distance_in_meter = calculateHeuristic_length(pos1, pos2)
     # the returned value will be in meters
@@ -69,7 +70,7 @@ def get_speed_from_edges(edge_data: Dict) -> float :
     if isinstance(highway, list) :
         highway = highway[0]
     speed_kmh = default_speed_KM.get(highway, 20)
-    
+
     # konversi ke meter/second
     return speed_kmh/3.6
 
