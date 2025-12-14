@@ -14,7 +14,7 @@ import components
 from components import aSTAR, creating_nodes, helper
 from components.initialization import path, start_id, goal_pos_id, closest_fire_station_to_target
 from components.helper import getting_taken_road_info
-
+print()
 
 G = ox.load_graphml('Balikpapan_map_graph.graphml')
 
