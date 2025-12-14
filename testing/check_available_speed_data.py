@@ -15,24 +15,34 @@ pd.set_option('display.max_colwidth', None)
 G = ox.load_graphml("Balikpapan_map_graph.graphml")
 # mengubah data yang ada di G menjadi GeoDataFrames 
 nodes, edges = ox.graph_to_gdfs(G)
-# memplotting graph
-ox.plot_graph(G)
 # menampilkan data yang ada pada edges (namun hanya column nya saja)
 print("Available data columns: ", edges.columns)
 
-
 # Menampilkan Nodes (persimpangan) (50) beserta dengan attribute nya 
 print("Nodes GeoDataFrame head:")
-print(nodes.head(50))
+print(nodes.head(5))
 print()
 print()
 # Menampilkan edges (jalanan) beserta dengan semua attribute kecuali geometry
 print("edges GeoDataFrame head :")
-print(edges.drop(columns=['geometry']).head(20))
+print(edges.drop(columns=['geometry']).head(5))
+print()
+print()
+print("=== Unique highway types ===")
+print(edges['highway'].astype(str).value_counts())
+print()
+print()
+print("=== Existing roads with speed value ===")
+print(edges['maxspeed'].astype(str).unique())
+print()
+print()
+print("=== Existing roads with missing speed value ===")
+print(edges[edges['maxspeed'].isna()][['name', 'highway', 'length']].head())
 print()
 print()
 # menampikkan edges (jalanan) beserta dengan attribute di dalam columnsToShow
-columnsToShow = ['name', 'highway', 'length', 'maxspeed', 'lanes', 'oneway', 'width', 'junction', 'bridge', 'access']
+columnsToShow = ['name', 'highway', 'length', 'maxspeed', 'lanes', 'oneway', 'width',]
 print("edges GeoDataFrame head with specific columns: ")
 pd.set_option('display.max_rows', None)
-print(edges[columnsToShow].head(50))
+print(edges[columnsToShow].head(100))
+

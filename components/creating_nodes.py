@@ -47,6 +47,7 @@ def createNo(type, position: Tuple[float] = 0, g: float = float(0), h: float = 0
 
     if type == 3 :
         return {
+        'id'
         'position': position,
         'g': g,
         'h': h,
@@ -56,4 +57,14 @@ def createNo(type, position: Tuple[float] = 0, g: float = float(0), h: float = 0
 
     else : 
         print("Only use value between 1 and 2")
+
+def neighbour(id, position: Tuple[float] = 0, g: float = float(0), h: float = 0.0, parent: Dict = None) : 
+      return {
+        'id' : id,
+        'position': position,
+        'g': g,
+        'h': h,
+        'f': g + h,
+        'parent': parent
+        }
 
