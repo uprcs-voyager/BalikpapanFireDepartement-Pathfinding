@@ -49,3 +49,10 @@ Berikut adalah penjelasan tentang apa yang terjadi saat kode di dalam file `main
 5. Setelah terdapat node awal (node 1) dan node tujuan (node 2). Kode akan memanggil fungsi pada file aSTAR untuk memulai pencarian rute terbaik yang dapat digunakan
 6. Proses utama program terjadi pada file aSTAR. function find_path mengambil parameter-parameter seperti ` start_id: Tuple[float], goal_id: Tuple[float], start_coordinate: Tuple[float, float],  goal_coordinate: Tuple[float, float]`. fungsi ini lalu memanfaatkan fungsi-fungsi yang terdapat di dalam file `helper.py` dan `creating_nodes.py` untuk mendapatkan data heuristic, neighbor yang ada, dan juga membuat node baru berdasarkan neighbor yang tersedia. 
 7. Selanjutnya, jika path yang optimal sudah ditemukan, kode akan memanggil fungsi yang berada di `helper.py`, fungsi tersebut bernama `reconstruct_path`.
+
+# IMPORTANT NOTE 
+## THERE STILL ROOM FOR IMPROVEMENT 
+anyone who wanted to contribute, can contribute. 
+
+# Personal note 
+i still wanted to make updates regarding the algorithm, maybe in the not so distance future
